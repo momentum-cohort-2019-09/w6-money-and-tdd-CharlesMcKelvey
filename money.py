@@ -63,10 +63,9 @@ class Money:
             elif type(self.amount) == float:
                 return f"{self.amount}"
         elif not self.currency.symbol:
-            this = str(self.amount)
-            that = f"{this}{self.currency.digits * '0'}"
-            # The reasoning behind the len(this)-1 is so that it is dynamic
-            return f"{self.currency.code} {that[:self.currency.digits + (len(this)-1)]}"
+            # return f"{self.currency.code} {self.amount:.{self.currency.digits}f}"
+            that = f"{self.amount}{self.currency.digits * '0'}"
+            return f"{self.currency.code} {that[:self.currency.digits + that.find('.')+1]}"
 
     def __repr__(self):
         return f"<Money {str(self)}>"
@@ -84,42 +83,55 @@ class Money:
         Add two money objects of the same currency. If they have different
         currencies, raise a DifferentCurrencyError.
         """
-        if self.currency.code == other.currency.code:
-            self.amount += other.amount
-            return self
-        raise DifferentCurrencyError('Different Currencies')
+        if self.currency != other.currency:
+            raise DifferentCurrencyError
+        return Money(self.amount + other.amount, self.currency)
+        # Why were these bad ways?
+        # You should return a new object. You shouldn't modify existing objects
+        # BAD WAY ---------------------------------------------
+        # if self.currency.code == other.currency.code:
+        #     self.amount += other.amount
+        #     return self
+        # raise DifferentCurrencyError('Different Currencies')
 
     def sub(self, other):
         """
         Subtract two money objects of the same currency. If they have different
         currencies, raise a DifferentCurrencyError.
         """
-        if self.currency.code == other.currency.code:
-            self.amount -= other.amount
-            return self
-        raise DifferentCurrencyError('Different Currencies')
+        if self.currency != other.currency:
+            raise DifferentCurrencyError
+        return Money(self.amount - other.amount, self.currency)
+        # BAD WAY ---------------------------------------------
+        # if self.currency.code == other.currency.code:
+        #     self.amount -= other.amount
+        #     return self
+        # raise DifferentCurrencyError('Different Currencies')
 
     def mul(self, multiplier):
         """
         Multiply a money object by a number to get a new money object.
         """
-        self.amount *= multiplier
-        return self
+        return Money(self.amount * multiplier, self.currency)
+        # BAD WAY ---------------------------------------------
+        # self.amount *= multiplier
+        # return self
 
     def div(self, divisor):
         """
         Divide a money object by a number to get a new money object.
         """
-        self.amount /= divisor
-        return self
+        return Money(self.amount / divisor, self.currency)
+        # BAD WAY ---------------------------------------------
+        # self.amount /= divisor
+        # return self
 
     def __add__(self, other):
         """
         Add a money object by another money object with standard mathematics
         """
         if self.currency.code == other.currency.code:
-            self.amount += other.amount
-            return self
+            return Money(self.amount + other.amount, self.currency)
         raise DifferentCurrencyError('Different Currencies')
 
     def __sub__(self, other):
@@ -127,8 +139,7 @@ class Money:
         Subtract a money object by another money object with standard mathematics
         """
         if self.currency.code == other.currency.code:
-            self.amount -= other.amount
-            return self
+            return Money(self.amount - other.amount, self.currency)
         raise DifferentCurrencyError('Different Currencies')
 
     def __mul__(self, other):
@@ -136,8 +147,7 @@ class Money:
         Multiply a money object by another money object with standard mathematics
         """
         if self.currency.code == other.currency.code:
-            self.amount *= other.amount
-            return self
+            return Money(self.amount * other.amount, self.currency)
         raise DifferentCurrencyError('Different Currencies')
 
     def __truediv__(self, other):
@@ -145,6 +155,5 @@ class Money:
         Divide a money object by another money object with standard mathematics
         """
         if self.currency.code == other.currency.code:
-            self.amount /= other.amount
-            return self
+            return Money(self.amount / other.amount, self.currency)
         raise DifferentCurrencyError('Different Currencies')
