@@ -98,8 +98,6 @@ class Money:
             return self
         raise DifferentCurrencyError('Different Currencies')
 
-        pass
-
     def mul(self, multiplier):
         """
         Multiply a money object by a number to get a new money object.
@@ -113,3 +111,39 @@ class Money:
         """
         self.amount /= divisor
         return self
+
+    def __add__(self, other):
+        """
+        Add a money object by another money object with standard mathematics
+        """
+        if self.currency.code == other.currency.code:
+            self.amount += other.amount
+            return self
+        raise DifferentCurrencyError('Different Currencies')
+
+    def __sub__(self, other):
+        """
+        Subtract a money object by another money object with standard mathematics
+        """
+        if self.currency.code == other.currency.code:
+            self.amount -= other.amount
+            return self
+        raise DifferentCurrencyError('Different Currencies')
+
+    def __mul__(self, other):
+        """
+        Multiply a money object by another money object with standard mathematics
+        """
+        if self.currency.code == other.currency.code:
+            self.amount *= other.amount
+            return self
+        raise DifferentCurrencyError('Different Currencies')
+
+    def __div__(self, other):
+        """
+        Divide a money object by another money object with standard mathematics
+        """
+        if self.currency.code == other.currency.code:
+            self.amount /= other.amount
+            return self
+        raise DifferentCurrencyError('Different Currencies')

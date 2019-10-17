@@ -87,3 +87,44 @@ def test_mul_money():
 def test_div_money():
     assert Money(3, USD).div(3) == Money(1, USD)
     assert Money(12, USD).div(4) == Money(3, USD)
+
+
+# Step 2 Tests -------------------------------------------
+def test_magic_add():
+    assert Money(3, USD) + Money(3, USD) == Money(6, USD)
+    assert Money(-1, USD) + Money(3, USD) == Money(2, USD)
+
+
+def test_magic_add_different_currencies():
+    with pytest.raises(DifferentCurrencyError):
+        Money(3, USD) + Money(3, BHD)
+
+
+def test_magic_sub():
+    assert Money(3, USD) - Money(3, USD) == Money(0, USD)
+    assert Money(-1, USD) - Money(3, USD) == Money(-4, USD)
+
+
+def test_magic_sub_different_currencies():
+    with pytest.raises(DifferentCurrencyError):
+        Money(3, USD) - Money(3, BHD)
+
+
+def test_magic_mul():
+    assert Money(3, USD) * Money(3, USD) == Money(9, USD)
+    assert Money(-1, USD) * Money(3, USD) == Money(-3, USD)
+
+
+def test_magic_mul_different_currencies():
+    with pytest.raises(DifferentCurrencyError):
+        Money(3, USD) * Money(3, BHD)
+
+
+def test_magic_div():
+    assert Money(16, USD) / Money(4, USD) == Money(4, USD)
+    assert Money(25, USD) / Money(5, USD) == Money(5, USD)
+
+
+def test_magic_div_different_currencies():
+    with pytest.raises(DifferentCurrencyError):
+        Money(3, USD) / Money(3, BHD)
