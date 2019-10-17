@@ -65,7 +65,8 @@ class Money:
         elif not self.currency.symbol:
             this = str(self.amount)
             that = f"{this}{self.currency.digits * '0'}"
-            return f"{self.currency.code} {that[:self.currency.digits + 2]}"
+            # The reasoning behind the len(this)-1 is so that it is dynamic
+            return f"{self.currency.code} {that[:self.currency.digits + (len(this)-1)]}"
 
     def __repr__(self):
         return f"<Money {str(self)}>"
@@ -139,7 +140,7 @@ class Money:
             return self
         raise DifferentCurrencyError('Different Currencies')
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         """
         Divide a money object by another money object with standard mathematics
         """

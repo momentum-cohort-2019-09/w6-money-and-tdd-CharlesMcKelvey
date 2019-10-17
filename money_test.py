@@ -121,8 +121,8 @@ def test_magic_mul_different_currencies():
 
 
 def test_magic_div():
-    assert Money(16, USD) / Money(4, USD) == Money(4, USD)
-    assert Money(25, USD) / Money(5, USD) == Money(5, USD)
+    assert Money(16, USD) / Money(4, USD) == Money(4.0, USD)
+    assert Money(25, USD) / Money(5, USD) == Money(5.0, USD)
 
 
 def test_magic_div_different_currencies():
